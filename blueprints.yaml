@@ -1,0 +1,33 @@
+name: Admin Addon Toast Ui Editor
+slug: admin-addon-toast-ui-editor
+type: plugin
+version: 0.1.0
+description: Add a Toast UI field to admin blueprints for markdown editing
+icon: plug
+author:
+  name: Hugh Barnes
+  email: dev@hubns.com
+homepage: https://github.com/hughbris/grav-plugin-admin-addon-toast-ui-editor
+# demo: http://demo.yoursite.com
+keywords: admin, editor, toastui
+bugs: https://github.com/hughbris/grav-plugin-admin-addon-toast-ui-editor/issues
+docs: https://github.com/hughbris/grav-plugin-admin-addon-toast-ui-editor/blob/develop/README.md
+license: MIT
+
+dependencies:
+  - { name: grav, version: '>=1.7.0' }
+  - { name: admin, version: '>=1.10' }
+
+form:
+  validation: loose
+  fields:
+    enabled:
+      type: toggle
+      label: PLUGIN_ADMIN.PLUGIN_STATUS
+      highlight: 1
+      default: 0
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
