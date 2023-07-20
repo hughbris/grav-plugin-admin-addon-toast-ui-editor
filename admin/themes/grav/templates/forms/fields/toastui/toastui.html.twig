@@ -1,0 +1,33 @@
+{% extends "forms/field.html.twig" %}
+{% block label %}
+    {% if field.label %}
+        {% set hint = field.help ? 'data-hint="' ~ field.help|tu|raw ~ '"': '' %}
+        <div class="form-label form-field hint--bottom" {{ hint }}>{{ field.label|tu|raw }}</div>
+    {% endif %}
+{% endblock %}
+{% block field %}
+    {% set toastui_id = unique_id(6, {'prefix': 'tui_'}) %}
+    <div class="form-field {{ field.classes|default('') }}">
+        <div class="form-data" id="{{ toastui_id }}">
+            <textarea
+                class="toastui"
+                name="{{ (scope ~ field.name)|fieldName }}"
+                {% if field.disabled or isDisabledToggleable %}disabled="disabled"{% endif %}
+                {% if field.placeholder %}placeholder="{{ field.placeholder|tu }}"{% endif %}
+                {% if field.autofocus in ['on', 'true', 1] %}autofocus="autofocus"{% endif %}
+                {% if field.novalidate in ['on', 'true', 1] %}novalidate="novalidate"{% endif %}
+                {% if field.readonly in ['on', 'true', 1] %}readonly="readonly"{% endif %}
+            >{{ value|join("\n")|e("html") }}</textarea>
+        </div>
+    </div>
+    {% script at 'bottom' %}
+    const {{ toastui_id }} = toastui.Editor.factory({
+        el: document.querySelector('#{{ toastui_id }}'),
+        initialValue: '{{ value|join("\n")|e('js') }}',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical',
+        usageStatistics: false, // TODO: config this
+        });
+    {% endscript %}
+
+{% endblock %}

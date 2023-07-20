@@ -24,8 +24,7 @@ class AdminAddonToastUIEditorPlugin extends Plugin
     /**
      * Initialize the plugin
      */
-    public function onPluginsInitialized(): void
-    {
+    public function onPluginsInitialized(): void {
         // Only proceed if we are in the admin plugin
         if (!$this->isAdmin()) {
             return;
@@ -33,7 +32,25 @@ class AdminAddonToastUIEditorPlugin extends Plugin
 
         // Enable the main events we are interested in
         $this->enable([
-            // Put your main events here
+            'onAdminTwigTemplatePaths' => ['addTemplatePath', 0],
+            'onAssetsInitialized' => ['addAssets', 10],
         ]);
     }
+
+    public function addTemplatePath($event) {
+        $event['paths'] = array_merge(
+            $event['paths'],
+            [__DIR__ . '/admin/themes/grav/templates']
+            ); // thanks @OleVik https://github.com/getgrav/grav/issues/1438#issuecomment-295670646
+        return $event;
+    }
+
+    public function addAssets() {
+        $this->grav['assets']->addJs('https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js'); # TODO: add this URL by config
+        $this->grav['assets']->addCss('https://uicdn.toast.com/editor/latest/toastui-editor.min.css');
+
+        // TODO: add toggleable blueprints that override key content areas, similar to https://github.com/newbthenewbd/grav-plugin-tinymce-editor/tree/develop/blueprints
+        // $this->grav['locator']->addPath('blueprints', '', __DIR__ . "/blueprints");
+    }
+
 }
