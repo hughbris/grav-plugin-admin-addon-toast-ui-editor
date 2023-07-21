@@ -49,7 +49,7 @@ The plugin is enabled by default.
 
 In your Admin blueprints, add or replace these properties to your editor field(s) wherever you want a Toast UI editor:
 
-```
+```yaml
 type: toastui
 validate:
     type: textarea # I have copied this and am yet to test whether it's important
