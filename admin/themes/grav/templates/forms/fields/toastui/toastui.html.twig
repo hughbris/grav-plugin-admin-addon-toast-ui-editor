@@ -8,26 +8,44 @@
 {% block field %}
     {% set toastui_id = unique_id(6, {'prefix': 'tui_'}) %}
     <div class="form-field {{ field.classes|default('') }}">
-        <div class="form-data" id="{{ toastui_id }}">
+        <div class="form-data">
             <textarea
-                class="toastui"
+                class="toastui-shadow"
+                data-bound="{{ toastui_id }}"
                 name="{{ (scope ~ field.name)|fieldName }}"
                 {% if field.disabled or isDisabledToggleable %}disabled="disabled"{% endif %}
-                {% if field.placeholder %}placeholder="{{ field.placeholder|tu }}"{% endif %}
-                {% if field.autofocus in ['on', 'true', 1] %}autofocus="autofocus"{% endif %}
+                {% if field.placeholder %}placeholder="{{ field.placeholder|tu }}"{% endif %} {# this probably has no effect and may not have an equivalent in Toast UI?? #}
+                {# ignoring field.autofocus #}
                 {% if field.novalidate in ['on', 'true', 1] %}novalidate="novalidate"{% endif %}
-                {% if field.readonly in ['on', 'true', 1] %}readonly="readonly"{% endif %}
-            >{{ value|join("\n")|e("html") }}</textarea>
+                {% if field.readonly in ['on', 'true', 1] %}readonly="readonly"{% endif %} {# see also JS setting this attribute below #}
+            >{{ value }}</textarea>
         </div>
+        <div id="{{ toastui_id }}"></div>
+        {% script %}
+        addEventListener('load', function() {
+            const toastui_id = '{{ toastui_id }}'; // let's make this marginally easier
+            const editorElement = document.getElementById(toastui_id);
+            const boundTextarea = editorElement.parentElement.querySelector("textarea.toastui-shadow[data-bound='" + toastui_id + "']");
+
+            const thisEditor = toastui.Editor.factory({
+                el: editorElement,
+                initialValue: '{{ value|e('js') }}',
+                initialEditType: 'markdown',
+                previewStyle: 'vertical',
+                usageStatistics: false, // TODO: config this
+                });
+
+            if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
+                boundTextarea.style.display = 'none';
+                boundTextarea.setAttribute('readonly', 'readonly');
+
+                thisEditor.on('change', function() {
+                    boundTextarea.value = thisEditor.getMarkdown();
+                    });
+            }
+
+            });
+        {% endscript %}
     </div>
-    {% script at 'bottom' %}
-    const {{ toastui_id }} = toastui.Editor.factory({
-        el: document.querySelector('#{{ toastui_id }}'),
-        initialValue: '{{ value|join("\n")|e('js') }}',
-        initialEditType: 'markdown',
-        previewStyle: 'vertical',
-        usageStatistics: false, // TODO: config this
-        });
-    {% endscript %}
 
 {% endblock %}
