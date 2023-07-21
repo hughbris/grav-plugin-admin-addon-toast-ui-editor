@@ -1,4 +1,6 @@
 {% extends "forms/field.html.twig" %}
+{% set toastui_id = unique_id(6, {'prefix': 'tui_'}) %}
+{% set configs = config.plugins['admin-addon-toast-ui-editor'] %}
 {% block label %}
     {% if field.label %}
         {% set hint = field.help ? 'data-hint="' ~ field.help|tu|raw ~ '"': '' %}
@@ -6,7 +8,6 @@
     {% endif %}
 {% endblock %}
 {% block field %}
-    {% set toastui_id = unique_id(6, {'prefix': 'tui_'}) %}
     <div class="form-field {{ field.classes|default('') }}">
         <div class="form-data">
             <textarea
@@ -32,7 +33,7 @@
                 initialValue: '{{ value|e('js') }}',
                 initialEditType: 'markdown',
                 previewStyle: 'vertical',
-                usageStatistics: false, // TODO: config this
+                usageStatistics: {{ configs.defaults.usageStatistics ? 'true' : 'false' }},
                 });
 
             if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {

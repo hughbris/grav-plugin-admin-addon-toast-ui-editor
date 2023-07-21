@@ -31,3 +31,27 @@ form:
         0: PLUGIN_ADMIN.DISABLED
       validate:
         type: bool
+
+    defaults:
+      type: section
+      title: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_TITLE
+      fields:
+
+        defaults.tips:
+          type: display
+          label: false
+          classes: tip
+          content: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_HELP
+
+        .usageStatistics:
+          type: toggle
+          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_USAGE_STATS
+          help: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_USAGE_STATS_HELP
+          # TODO: requires a better exploration of this option including a hyperlink to https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source (so need markdown)
+          highlight: 1
+          # default: 0
+          options:
+            1: PLUGIN_ADMIN.ENABLED
+            0: PLUGIN_ADMIN.DISABLED
+          validate:
+            type: bool

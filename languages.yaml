@@ -1,4 +1,6 @@
 en:
   PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR:
-    TEXT_VARIABLE: Text Variable
-    TEXT_VARIABLE_HELP: Text to add to the top of a page
+    DEFAULTS_HELP: "Default options for Editor fields. These can be overridden in each Editor field's properties."
+    DEFAULTS_TITLE: Defaults
+    DEFAULTS_USAGE_STATS: Report usage Statistics
+    DEFAULTS_USAGE_STATS_HELP: Send your hostname to Google Analytics

@@ -39,9 +39,13 @@ Here is the default configuration and an explanation of available options:
 
 ```yaml
 enabled: true
+defaults:
+  usageStatistics: false # https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source
 ```
 
-Note that if you use the Admin Plugin, a file with your configuration named admin-addon-toast-ui-editor.yaml will be saved in the `user/config/plugins/` folder once the configuration is saved in the Admin.
+**`defaults.usageStatistics`**: [Send your hostname to Google Analytics](https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source). ToastUI has this enabled by default, but it is _off_ here by default. By all means help a great open source project to collect usage data, I'm just not going to enable that by default on behalf of my users when the data custodian is an advertising corporation.
+
+> Note that if you use the Admin Plugin, a file with your configuration named admin-addon-toast-ui-editor.yaml will be saved in the `user/config/plugins/` folder once the configuration is saved in the Admin.
 
 ## Usage
 
@@ -52,7 +56,7 @@ In your Admin blueprints, add or replace these properties to your editor field(s
 ```yaml
 type: toastui
 validate:
-    type: textarea # I have copied this and am yet to test whether it's important
+    type: textarea # I have copied this and am yet to test whether it's actually important
 ```
 
 ## Credits
@@ -66,5 +70,7 @@ validate:
 - [ ] Add basic configuration options
 - [ ] Support custom editor options globally and per instance
 - [ ] Document how to add/modify toolbar buttons
+- [ ] Try getting an expanded view similar to default codemirror
+- [ ] Add a debug mode to show the shadow textarea and log to console
 
 There seem to be infinite tweaks I could make to the JS, and indeed editors can probably be created from a classname alone without needing a custom field type. I'm going to reserve my judgement and leave this kind of optimisation to later.
