@@ -60,6 +60,29 @@ form:
           classes: tip
           content: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_HELP
 
+        .height:
+          type: text
+          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_HEIGHT_LABEL
+          help: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_HEIGHT_HELP
+          toggleable: true
+
+        .previewStyle:
+          type: radio
+          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_PREVIEW_STYLE_LABEL
+          help: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_PREVIEW_STYLE_HELP
+          options:
+            tab: 'tab'
+            vertical: 'vertical'
+
+        .initialEditType:
+          type: radio
+          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_INITIAL_EDIT_TYPE_LABEL
+          options:
+            markdown: 'markdown'
+            wysiwyg: 'wysiwyg'
+
+        # TODO: there are many more and I don't see any way to avoid pasting them individually if they are to be available via Admin
+
         .usageStatistics:
           type: toggle
           label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_USAGE_STATS_LABEL

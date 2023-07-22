@@ -5,5 +5,10 @@ en:
     ASSETS_JS_LABEL: Javascript URL
     ASSETS_CSS_LABEL: CSS URL
     DEFAULTS_TITLE: Defaults
+    DEFAULTS_HEIGHT_LABEL: Height
+    DEFAULTS_HEIGHT_HELP: "Editor's height style value. Height is applied as border-box e.g. '300px' (default), '100%', 'auto'"
+    DEFAULTS_PREVIEW_STYLE_LABEL: Preview style
+    DEFAULTS_PREVIEW_STYLE_HELP: "Markdown editor's preview style"
+    DEFAULTS_INITIAL_EDIT_TYPE_LABEL: Initial editor type
     DEFAULTS_USAGE_STATS_LABEL: Report usage Statistics
     DEFAULTS_USAGE_STATS_HELP: Send your hostname to Google Analytics

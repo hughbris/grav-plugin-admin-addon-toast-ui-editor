@@ -45,9 +45,14 @@ enabled: true
 #   css: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'
 defaults:
   usageStatistics: false # https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source
+  initialEditType: 'markdown'
+  previewStyle: 'vertical'
 ```
 
 **`assets.js`** / **`assets.css`**: Toggle these on in Admin or add the property directly into YAML if you want to set a URL for the Toast UI script and stylesheet assets. The default is the official CDN URL (latest version permalink). If you toggle either of these fields `off` or do not set them, the plugin will use a local copy. In most cases, this is sufficient.
+
+**`defaults.initialEditType`**
+**`defaults.previewStyle`**: Set [default (global) options](https://nhn.github.io/tui.editor/latest/ToastUIEditorCore) for any editors created in blueprints. These can be overridden for any specific field in blueprints as explained under [Usage below](#custom-field-options). These options, and only a small selection of others, are available through the plugin's Admin template. However, you can add any others you find in this [well-documented API](https://nhn.github.io/tui.editor/latest/ToastUIEditorCore) manually by editing the plugin's YAML configuration.
 
 **`defaults.usageStatistics`**: [Send your hostname to Google Analytics](https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source). ToastUI has this enabled by default, but it is _off_ here by default. By all means help a great open source project to collect usage data, I'm just not going to enable that by default on behalf of my users when the data custodian is an advertising corporation.
 
@@ -65,6 +70,18 @@ validate:
     type: textarea # I have copied this and am yet to test whether it's actually important
 ```
 
+### Custom field options
+
+For any editor field, you can override global plugin editor options (`defaults`) by adding options under `attributes.toastui` like this (for example):
+
+```yaml
+myeditorfield:
+    # ...
+    attributes:
+        toastui:
+            initialEditType: wysiwyg
+```
+
 ## Credits
 
 * [@OleVik](https://github.com/OleVik) [with this answer](https://github.com/getgrav/grav/issues/1438#issuecomment-295670646) pointed me to a whole lot of information I was having trouble finding.
@@ -74,7 +91,7 @@ validate:
 ## To Do
 
 - [ ] Add basic configuration options
-- [ ] Support custom editor options globally and per instance
+- [x] Support custom editor options globally and per instance
 - [ ] Document how to add/modify toolbar buttons
 - [ ] Try getting an expanded view similar to default codemirror
 - [ ] Add a debug mode to show the shadow textarea and log to console

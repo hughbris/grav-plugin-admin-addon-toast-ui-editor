@@ -24,17 +24,18 @@
         <div id="{{ toastui_id }}"></div>
         {% script %}
         addEventListener('load', function() {
-            const toastui_id = '{{ toastui_id }}'; // let's make this marginally easier
-            const editorElement = document.getElementById(toastui_id);
-            const boundTextarea = editorElement.parentElement.querySelector("textarea.toastui-shadow[data-bound='" + toastui_id + "']");
+            const toastUiId = '{{ toastui_id }}'; // let's make this marginally easier
+            const editorElement = document.getElementById(toastUiId);
+            const boundTextarea = editorElement.parentElement.querySelector("textarea.toastui-shadow[data-bound='" + toastUiId + "']");
 
-            const thisEditor = toastui.Editor.factory({
-                el: editorElement,
-                initialValue: '{{ value|e('js') }}',
-                initialEditType: 'markdown',
-                previewStyle: 'vertical',
-                usageStatistics: {{ configs.defaults.usageStatistics ? 'true' : 'false' }},
-                });
+            const factoryOptions = Object.assign(
+                {{ config.plugins['admin-addon-toast-ui-editor'].defaults|json_encode|raw }}, /* plugin config */
+                {{ field.attributes.toastui|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|raw }}, /* instance */
+                {
+                    initialValue: '{{ value|e('js') }}',
+                    el: editorElement,
+                } /* runtime */ );
+            const thisEditor = toastui.Editor.factory(factoryOptions);
 
             if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
                 boundTextarea.style.display = 'none';
