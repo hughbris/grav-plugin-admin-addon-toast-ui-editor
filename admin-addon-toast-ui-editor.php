@@ -46,8 +46,8 @@ class AdminAddonToastUIEditorPlugin extends Plugin
     }
 
     public function addAssets() {
-        $this->grav['assets']->addJs($this->config()['assets']['js']);
-        $this->grav['assets']->addCss($this->config()['assets']['css']);
+        $this->grav['assets']->addJs(isset($this->config()['assets']['js']) ? $this->config()['assets']['js'] : 'plugin://admin-addon-toast-ui-editor/assets/js/toastui-editor-all.min.js');
+        $this->grav['assets']->addCss(isset($this->config()['assets']['css']) ? $this->config()['assets']['css'] : 'plugin://admin-addon-toast-ui-editor/assets/css/toastui-editor.min.css');
 
         // TODO: add toggleable blueprints that override key content areas, similar to https://github.com/newbthenewbd/grav-plugin-tinymce-editor/tree/develop/blueprints
         // $this->grav['locator']->addPath('blueprints', '', __DIR__ . "/blueprints");

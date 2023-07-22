@@ -39,14 +39,15 @@ Here is the default configuration and an explanation of available options:
 
 ```yaml
 enabled: true
-assets:
-  js: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js'
-  css: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'
+# assets: # Off by default, meaning we use local copies of these assets.
+    # When toggled on, these default to:
+#   js: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js'
+#   css: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'
 defaults:
   usageStatistics: false # https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source
 ```
 
-**`assets.js`** / **`assets.css`**: URL of the Toast UI script and style assets, defaulting to the official CDN, latest version. If you toggle either of these fields off, the plugin will use a local copy, which may well be what you want.
+**`assets.js`** / **`assets.css`**: Toggle these on in Admin or add the property directly into YAML if you want to set a URL for the Toast UI script and stylesheet assets. The default is the official CDN URL (latest version permalink). If you toggle either of these fields `off` or do not set them, the plugin will use a local copy. In most cases, this is sufficient.
 
 **`defaults.usageStatistics`**: [Send your hostname to Google Analytics](https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source). ToastUI has this enabled by default, but it is _off_ here by default. By all means help a great open source project to collect usage data, I'm just not going to enable that by default on behalf of my users when the data custodian is an advertising corporation.
 

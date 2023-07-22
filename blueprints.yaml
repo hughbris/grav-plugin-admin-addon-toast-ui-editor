@@ -40,11 +40,13 @@ form:
         .js:
           type: url
           label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.ASSETS_JS_LABEL
+          default: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js'
           toggleable: true
 
         .css:
           type: url
           label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.ASSETS_CSS_LABEL
+          default: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'
           toggleable: true
 
     defaults:
