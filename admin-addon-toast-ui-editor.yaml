@@ -1,3 +1,6 @@
 enabled: true
 defaults:
   usageStatistics: false
+assets: # TODO: these could probably stand to be arrays rather than scalar strings
+  js: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js'
+  css: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'

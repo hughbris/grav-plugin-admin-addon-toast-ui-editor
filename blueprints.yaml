@@ -32,6 +32,21 @@ form:
       validate:
         type: bool
 
+    assets:
+      type: section
+      title: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.ASSETS_TITLE
+      fields:
+
+        .js:
+          type: url
+          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.ASSETS_JS_LABEL
+          toggleable: true
+
+        .css:
+          type: url
+          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.ASSETS_CSS_LABEL
+          toggleable: true
+
     defaults:
       type: section
       title: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_TITLE
@@ -45,7 +60,7 @@ form:
 
         .usageStatistics:
           type: toggle
-          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_USAGE_STATS
+          label: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_USAGE_STATS_LABEL
           help: PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR.DEFAULTS_USAGE_STATS_HELP
           # TODO: requires a better exploration of this option including a hyperlink to https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source (so need markdown)
           highlight: 1

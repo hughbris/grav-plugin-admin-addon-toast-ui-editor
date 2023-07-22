@@ -1,6 +1,9 @@
 en:
   PLUGIN_ADMIN_ADDON_TOAST_UI_EDITOR:
     DEFAULTS_HELP: "Default options for Editor fields. These can be overridden in each Editor field's properties."
+    ASSETS_TITLE: Assets
+    ASSETS_JS_LABEL: Javascript URL
+    ASSETS_CSS_LABEL: CSS URL
     DEFAULTS_TITLE: Defaults
-    DEFAULTS_USAGE_STATS: Report usage Statistics
+    DEFAULTS_USAGE_STATS_LABEL: Report usage Statistics
     DEFAULTS_USAGE_STATS_HELP: Send your hostname to Google Analytics
