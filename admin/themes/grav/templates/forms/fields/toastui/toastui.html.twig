@@ -24,21 +24,29 @@
         <div id="{{ toastui_id }}"></div>
         {% script %}
         addEventListener('load', function() {
-            const toastUiId = '{{ toastui_id }}'; // let's make this marginally easier
+
+            // let's make the make the JS less interpolated (deterpolated??) ..
+            const toastUiId = '{{ toastui_id }}';
+            const editorDefaultOptions = {{ configs.defaults|json_encode|raw }};
+            const fieldCustomOptions = {{ field.attributes.toastui|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|raw }};
+            const editorInitialValue = '{{ value|e('js') }}';
+            const editorDefaultToolbar = {{ configs.toolbar|json_encode|raw }};
+
             const editorElement = document.getElementById(toastUiId);
             const boundTextarea = editorElement.parentElement.querySelector("textarea.toastui-shadow[data-bound='" + toastUiId + "']");
 
+            const editorRuntimeOptions = {
+                initialValue: editorInitialValue,
+                el: editorElement,
+                };
             const theseOptions = Object.assign(
-                {{ configs.defaults|json_encode|raw }}, /* plugin config */
-                {{ field.attributes.toastui|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|raw }}, /* instance */
-                {
-                    initialValue: '{{ value|e('js') }}',
-                    el: editorElement,
-                } /* runtime */ );
+                editorDefaultOptions,
+                fieldCustomOptions,
+                editorRuntimeOptions );
             const thisEditor = toastui.Editor.factory(theseOptions);
 
             {# TODO: support overrides form instance properties #}
-            {{ configs.toolbar.remove|json_encode|raw }}.forEach( function(itemName) {
+            editorDefaultToolbar.remove.forEach( function(itemName) {
                 thisEditor.removeToolbarItem(itemName);
                 });
 
