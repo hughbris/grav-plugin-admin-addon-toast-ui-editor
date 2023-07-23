@@ -28,14 +28,14 @@
             const editorElement = document.getElementById(toastUiId);
             const boundTextarea = editorElement.parentElement.querySelector("textarea.toastui-shadow[data-bound='" + toastUiId + "']");
 
-            const factoryOptions = Object.assign(
-                {{ config.plugins['admin-addon-toast-ui-editor'].defaults|json_encode|raw }}, /* plugin config */
+            const theseOptions = Object.assign(
+                {{ configs.defaults|json_encode|raw }}, /* plugin config */
                 {{ field.attributes.toastui|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|raw }}, /* instance */
                 {
                     initialValue: '{{ value|e('js') }}',
                     el: editorElement,
                 } /* runtime */ );
-            const thisEditor = toastui.Editor.factory(factoryOptions);
+            const thisEditor = toastui.Editor.factory(theseOptions);
 
             if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
                 boundTextarea.style.display = 'none';
