@@ -7,3 +7,5 @@ defaults:
     # When toggled on, these default to:
 #   js: 'https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js'
 #   css: 'https://uicdn.toast.com/editor/latest/toastui-editor.min.css'
+# toolbar: # Off by default, so we use ToastUI default toolbar
+#   remove: ['array', 'of', 'toolbar', 'names', 'to', remove']

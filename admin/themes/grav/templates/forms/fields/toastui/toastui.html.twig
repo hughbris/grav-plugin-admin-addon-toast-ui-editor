@@ -37,6 +37,11 @@
                 } /* runtime */ );
             const thisEditor = toastui.Editor.factory(theseOptions);
 
+            {# TODO: support overrides form instance properties #}
+            {{ configs.toolbar.remove|json_encode|raw }}.forEach( function(itemName) {
+                thisEditor.removeToolbarItem(itemName);
+                });
+
             if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
                 boundTextarea.style.display = 'none';
                 boundTextarea.setAttribute('readonly', 'readonly');

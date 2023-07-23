@@ -47,6 +47,8 @@ defaults:
   usageStatistics: false # https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source
   initialEditType: 'markdown'
   previewStyle: 'vertical'
+# toolbar: # Off by default, so we use ToastUI default toolbar
+#   remove: ['array', 'of', 'toolbar', 'names', 'to', remove']
 ```
 
 **`assets.js`** / **`assets.css`**: Toggle these on in Admin or add the property directly into YAML if you want to set a URL for the Toast UI script and stylesheet assets. The default is the official CDN URL (latest version permalink). If you toggle either of these fields `off` or do not set them, the plugin will use a local copy. In most cases, this is sufficient.
@@ -55,6 +57,8 @@ defaults:
 **`defaults.previewStyle`**: Set [default (global) options](https://nhn.github.io/tui.editor/latest/ToastUIEditorCore) for any editors created in blueprints. These can be overridden for any specific field in blueprints as explained under [Usage below](#custom-field-options). These options, and only a small selection of others, are available through the plugin's Admin template. However, you can add any others you find in this [well-documented API](https://nhn.github.io/tui.editor/latest/ToastUIEditorCore) manually by editing the plugin's YAML configuration.
 
 **`defaults.usageStatistics`**: [Send your hostname to Google Analytics](https://nhn.github.io/tui.editor/latest/#Collect-statistics-on-the-use-of-open-source). ToastUI has this enabled by default, but it is _off_ here by default. By all means help a great open source project to collect usage data, I'm just not going to enable that by default on behalf of my users when the data custodian is an advertising corporation.
+
+**`toolbar.remove`**: Remove Toast UI editor toolbar items globally, identified by name
 
 > Note that if you use the Admin Plugin, a file with your configuration named admin-addon-toast-ui-editor.yaml will be saved in the `user/config/plugins/` folder once the configuration is saved in the Admin.
 
