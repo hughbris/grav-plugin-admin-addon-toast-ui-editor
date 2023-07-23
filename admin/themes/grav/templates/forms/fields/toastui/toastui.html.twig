@@ -45,7 +45,7 @@
                 editorRuntimeOptions );
             const thisEditor = toastui.Editor.factory(theseOptions);
 
-            {# TODO: support overrides form instance properties #}
+            {# TODO: support overrides for instance properties #}
             editorDefaultToolbar.remove.forEach( function(itemName) {
                 thisEditor.removeToolbarItem(itemName);
                 });
