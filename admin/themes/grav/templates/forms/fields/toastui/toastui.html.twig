@@ -144,11 +144,11 @@
                     url += '?classes=' + settings.classes.join();
                 }
 
-                let replacement = '![' + settings.alt + '](' + url + ')';
+                let replacement = `![${settings.alt}](${url})`;
 
                 const captionProvided = ( Object.hasOwn(settings, 'caption') && settings.caption.trim().length > 0);
                 if(captionProvided) {
-                    replacement = '[figure caption="' + settings.caption + '"]' + replacement + '[/figure]';
+                    replacement = `[figure caption="${settings.caption}"]${replacement}[/figure]`;
                 }
 
                 thisEditor.replaceSelection(replacement);
