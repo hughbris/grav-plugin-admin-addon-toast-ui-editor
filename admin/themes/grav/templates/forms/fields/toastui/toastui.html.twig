@@ -63,6 +63,12 @@
                 <input name="alt" type="text" />
                 <label>Caption</label>
                 <input name="caption" type="text" />
+                <fieldset name="classes">
+                    <legend>Apply these properties</legend>
+                    <input id="label.left.{{ toastui_id }}" name="class[alignleft]" value="alignleft" type="checkbox" /><label for="label.left.{{ toastui_id }}">Left</label>
+                    <input id="label.right.{{ toastui_id }}" name="class[alignright]" value="alignright" type="checkbox" /><label for="label.right.{{ toastui_id }}">Right</label>
+                    <input id="label.center.{{ toastui_id }}" name="class[aligncenter]" value="aligncenter" type="checkbox" /><label for="label.center.{{ toastui_id }}">Centre</label>
+                </fieldset>
                 <div class="toastui-editor-button-container">
                     <button name="cancelButton" type="button" class="toastui-editor-close-button">Cancel</button>
                     <input name="submitButton" type="submit" class="toastui-editor-ok-button" value="Insert" />
@@ -70,6 +76,11 @@
             `;
             const fields = form.elements;
             fields.submitButton.style.display = 'inline'; // TODO: see about putting this somewhere more sensible
+            fields.classes.style['margin-top'] = '1rem'; // as above, so below
+            Array.from(fields.classes.getElementsByTagName('label')).forEach((l) => {
+                l.style.display = 'inline';
+                l.style['padding-right'] = '0.5rem';
+                }); // also this
 
             const closePopup = () => {
                 console.log('Close popup');
@@ -83,11 +94,17 @@
                 e.preventDefault();
                 console.log('Insert button', e);
 
-                thisEditor.eventEmitter.emit('command', 'addMarkdownImage', {
+                const values = {
                     url: fields.url.value,
                     alt: fields.alt.value,
                     caption: fields.caption.value,
-                    });
+                    };
+
+                const classes = Array.from(fields.classes.elements).filter(c => c.checked);
+                if (classes.length > 0) {
+                    values['classes'] = classes.map(c => c.value);
+                }
+                thisEditor.eventEmitter.emit('command', 'addMarkdownImage', values);
                 closePopup();
                 });
 
@@ -106,12 +123,18 @@
 
             thisEditor.addCommand('markdown', 'addMarkdownImage', (settings, ed) => {
                 console.log('addMarkdownImage', settings, ed, this);
-                let replacement = '![' + settings.alt + '](' + settings.url + ')';
-                const captionProvided = ( Object.hasOwn(settings, 'caption') && settings.caption.trim().length > 0);
+                let url = settings.url;
+                if(Object.hasOwn(settings, 'classes')) {
+                    url += '?classes=' + settings.classes.join();
+                }
 
+                let replacement = '![' + settings.alt + '](' + url + ')';
+
+                const captionProvided = ( Object.hasOwn(settings, 'caption') && settings.caption.trim().length > 0);
                 if(captionProvided) {
                     replacement = '[figure caption="' + settings.caption + '"]' + replacement + '[/figure]';
                 }
+
                 thisEditor.replaceSelection(replacement);
                 });
 
