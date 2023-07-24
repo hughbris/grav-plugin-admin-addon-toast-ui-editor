@@ -56,11 +56,16 @@
             form.setAttribute('name', 'addImageCustom');
             container.appendChild(form);
             // not sure I'm winning with this DOM approach but it would give me JS names for the nodes I want to use later, so instead I am going to set those straight after this block use DOM selector methods
+            const mediaSelect = Object.keys(mediaListOnLoad).map(m => `<option value="${m}">${m}</option>`).join("\n");
             form.innerHTML = `
                 <label>Image location</label>
-                <input name="url" type="text" aria-required="true" required="required" />
+                <select name="url" aria-required="true" required="required" pattern=".+">
+                    <option></option>
+                    ${mediaSelect}
+                </select>
                 <label>Alternate Text</label>
                 <input name="alt" type="text" />
+                {# TODO: add a title field? #}
                 <label>Caption</label>
                 <input name="caption" type="text" />
                 <fieldset name="classes">
@@ -87,6 +92,17 @@
                 thisEditor.eventEmitter.emit('closePopup');
                 thisEditor.focus();
                 };
+
+            fields.url.addEventListener('change', (e) => {
+                if(Object.hasOwn(mediaListOnLoad, e.target.value)) {
+                    if(fields.caption.value.trim().length == 0) {
+                        fields.caption.value = mediaListOnLoad[e.target.value].caption;
+                    }
+                    if(fields.alt.value.trim().length == 0) {
+                        fields.alt.value = mediaListOnLoad[e.target.value].alt;
+                    }
+                }
+                });
 
             fields.cancelButton.addEventListener('click', closePopup);
 
