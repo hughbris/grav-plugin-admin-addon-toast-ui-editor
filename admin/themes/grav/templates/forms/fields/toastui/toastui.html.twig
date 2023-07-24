@@ -63,13 +63,14 @@
                 <input name="alt" type="text" />
                 <div class="toastui-editor-button-container">
                     <button type="button" class="toastui-editor-close-button">Cancel</button>
-                    <button type="button" class="toastui-editor-ok-button">Insert</button>
+                    <input type="submit" class="toastui-editor-ok-button" value="Insert" />
                 </div>
             `;
             const buttons = {
                 close: container.querySelector('.toastui-editor-close-button'),
                 submit: container.querySelector('.toastui-editor-ok-button'),
                 };
+            buttons.submit.style.display = 'inline'; // TODO: see about putting this somewhere more sensible
             const fields = {
                 url: container.querySelector("[name='url']"),
                 alt: container.querySelector("[name='alt']"),
@@ -83,7 +84,8 @@
 
             buttons['close'].addEventListener('click', closePopup);
 
-            buttons['submit'].addEventListener('click', (e) => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
                 console.log('Insert button', e);
                 thisEditor.eventEmitter.emit('command', 'addMarkdownImage', {
                     url: fields.url.value,
