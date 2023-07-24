@@ -46,33 +46,34 @@
             const thisEditor = toastui.Editor.factory(theseOptions);
 
             {# TODO: support overrides for instance properties #}
-            editorDefaultToolbar.remove.forEach( function(itemName) {
+            editorDefaultToolbar['remove'].forEach( function(itemName) {
                 thisEditor.removeToolbarItem(itemName);
                 });
 
             // Add image insertion popup WIP
-            const container = document.createElement('div');
-            container.innerHTML = `
-                <label>Image URL</label>
-                <input
-                    name="imageUrl"
-                    type="text"
-                />
+            const container = document.createElement('div'),
+                form = document.createElement('form');
+            form.setAttribute('name', 'addImageCustom');
+            container.appendChild(form);
+            // not sure I'm winning with this DOM approach but it would give me JS names for the nodes I want to use later, so instead I am going to set those straight after this block use DOM selector methods
+            form.innerHTML = `
+                <label>Image location</label>
+                <input name="url" type="text" />
                 <label>Alternate Text</label>
-                <input
-                    name="imageAltText"
-                    type="text"
-                />
-                <br/><br/>
+                <input name="alt" type="text" />
                 <div class="toastui-editor-button-container">
-                    <button type="button" class="toastui-editor-close-button">
-                    Cancel
-                    </button>
-                    <button type="button" class="toastui-editor-ok-button">
-                    Insert
-                    </button>
+                    <button type="button" class="toastui-editor-close-button">Cancel</button>
+                    <button type="button" class="toastui-editor-ok-button">Insert</button>
                 </div>
             `;
+            const buttons = {
+                close: container.querySelector('.toastui-editor-close-button'),
+                submit: container.querySelector('.toastui-editor-ok-button'),
+                };
+            const fields = {
+                url: container.querySelector("[name='url']"),
+                alt: container.querySelector("[name='alt']"),
+                };
 
             const closePopup = () => {
                 console.log('Close popup');
@@ -80,13 +81,14 @@
                 thisEditor.focus();
                 };
 
-            container.querySelector('.toastui-editor-close-button').addEventListener('click', closePopup);
+            buttons['close'].addEventListener('click', closePopup);
 
-            container.querySelector('.toastui-editor-ok-button').addEventListener('click', (e) => {
+            buttons['submit'].addEventListener('click', (e) => {
                 console.log('Insert button', e);
                 thisEditor.eventEmitter.emit('command', 'addMarkdownImage', {
-                    alt: container.querySelector("[name='imageAltText']").value,
-                    url: container.querySelector("[name='imageUrl']").value });
+                    url: fields.url.value,
+                    alt: fields.alt.value,
+                    });
                 closePopup();
                 });
 
