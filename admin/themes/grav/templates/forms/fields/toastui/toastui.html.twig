@@ -58,23 +58,18 @@
             // not sure I'm winning with this DOM approach but it would give me JS names for the nodes I want to use later, so instead I am going to set those straight after this block use DOM selector methods
             form.innerHTML = `
                 <label>Image location</label>
-                <input name="url" type="text" />
+                <input name="url" type="text" aria-required="true" required="required" />
                 <label>Alternate Text</label>
                 <input name="alt" type="text" />
+                <label>Caption</label>
+                <input name="caption" type="text" />
                 <div class="toastui-editor-button-container">
-                    <button type="button" class="toastui-editor-close-button">Cancel</button>
-                    <input type="submit" class="toastui-editor-ok-button" value="Insert" />
+                    <button name="cancelButton" type="button" class="toastui-editor-close-button">Cancel</button>
+                    <input name="submitButton" type="submit" class="toastui-editor-ok-button" value="Insert" />
                 </div>
             `;
-            const buttons = {
-                close: container.querySelector('.toastui-editor-close-button'),
-                submit: container.querySelector('.toastui-editor-ok-button'),
-                };
-            buttons.submit.style.display = 'inline'; // TODO: see about putting this somewhere more sensible
-            const fields = {
-                url: container.querySelector("[name='url']"),
-                alt: container.querySelector("[name='alt']"),
-                };
+            const fields = form.elements;
+            fields.submitButton.style.display = 'inline'; // TODO: see about putting this somewhere more sensible
 
             const closePopup = () => {
                 console.log('Close popup');
@@ -82,14 +77,16 @@
                 thisEditor.focus();
                 };
 
-            buttons['close'].addEventListener('click', closePopup);
+            fields.cancelButton.addEventListener('click', closePopup);
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 console.log('Insert button', e);
+
                 thisEditor.eventEmitter.emit('command', 'addMarkdownImage', {
                     url: fields.url.value,
                     alt: fields.alt.value,
+                    caption: fields.caption.value,
                     });
                 closePopup();
                 });
@@ -107,10 +104,15 @@
                 style: { backgroundImage: 'none' },
                 });
 
-            // https://github.com/nhn/tui.editor/issues/2950
-            thisEditor.addCommand('markdown', 'addMarkdownImage', (options, ed) => {
-                console.log('addMarkdownImage', options, ed, this);
-                thisEditor.replaceSelection('![' + options.alt + '](' + options.url + ')');
+            thisEditor.addCommand('markdown', 'addMarkdownImage', (settings, ed) => {
+                console.log('addMarkdownImage', settings, ed, this);
+                let replacement = '![' + settings.alt + '](' + settings.url + ')';
+                const captionProvided = ( Object.hasOwn(settings, 'caption') && settings.caption.trim().length > 0);
+
+                if(captionProvided) {
+                    replacement = '[figure caption="' + settings.caption + '"]' + replacement + '[/figure]';
+                }
+                thisEditor.replaceSelection(replacement);
                 });
 
             if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
