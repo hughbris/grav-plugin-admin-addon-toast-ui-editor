@@ -50,12 +50,72 @@
                 thisEditor.removeToolbarItem(itemName);
                 });
 
+            // Add image insertion popup WIP
+            const container = document.createElement('div');
+            container.innerHTML = `
+                <label>Image URL</label>
+                <input
+                    name="imageUrl"
+                    type="text"
+                />
+                <label>Alternate Text</label>
+                <input
+                    name="imageAltText"
+                    type="text"
+                />
+                <br/><br/>
+                <div class="toastui-editor-button-container">
+                    <button type="button" class="toastui-editor-close-button">
+                    Cancel
+                    </button>
+                    <button type="button" class="toastui-editor-ok-button">
+                    Insert
+                    </button>
+                </div>
+            `;
+
+            const closePopup = () => {
+                console.log('Close popup');
+                thisEditor.eventEmitter.emit('closePopup');
+                thisEditor.focus();
+                };
+
+            container.querySelector('.toastui-editor-close-button').addEventListener('click', closePopup);
+
+            container.querySelector('.toastui-editor-ok-button').addEventListener('click', (e) => {
+                console.log('Insert button', e);
+                thisEditor.eventEmitter.emit('command', 'addMarkdownImage', {
+                    alt: container.querySelector("[name='imageAltText']").value,
+                    url: container.querySelector("[name='imageUrl']").value });
+                closePopup();
+                });
+
+            thisEditor.insertToolbarItem({}, {
+                name: 'markdownImagePopup',
+                tooltip: 'Add an image',
+                popup: {
+                    body: container,
+                    className: 'FIXME',
+                    style: { width: 'auto' },
+                }   ,
+                text: 'IMG',
+                className: 'toastui-editor-toolbar-icons first',
+                style: { backgroundImage: 'none' },
+                });
+
+            // https://github.com/nhn/tui.editor/issues/2950
+            thisEditor.addCommand('markdown', 'addMarkdownImage', (options, ed) => {
+                console.log('addMarkdownImage', options, ed, this);
+                thisEditor.replaceSelection('![' + options.alt + '](' + options.url + ')');
+                });
+
             if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
                 boundTextarea.style.display = 'none';
                 boundTextarea.setAttribute('readonly', 'readonly');
 
                 thisEditor.on('change', function() {
                     boundTextarea.value = thisEditor.getMarkdown();
+                    console.log('change value of ' + boundTextarea.name);
                     });
             }
 
