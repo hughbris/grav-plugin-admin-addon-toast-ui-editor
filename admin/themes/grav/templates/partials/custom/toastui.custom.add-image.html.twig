@@ -114,7 +114,7 @@ addEventListener('load', function() {
 
     thisEditor.addCommand('markdown', 'addMarkdownImage', (settings, ed) => {
         console.log('addMarkdownImage', settings, ed, this);
-        let url = settings.url;
+        let url = encodeURI(settings.url);
         if(Object.hasOwn(settings, 'classes')) {
             url += '?classes=' + settings.classes.join();
         }
