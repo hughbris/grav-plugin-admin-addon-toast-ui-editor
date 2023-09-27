@@ -1,0 +1,142 @@
+addEventListener('load', function() {
+
+    // let's make the make the JS less interpolated (deterpolated??) ..
+    const toastUiId = '{{ toastui_id }}';
+    const editorDefaultOptions = {{ configs.defaults|json_encode|raw }};
+    const fieldCustomOptions = {{ field.attributes.toastui|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|raw }};
+    const editorInitialValue = '{{ value|e('js') }}';
+    const editorDefaultToolbar = {{ configs.toolbar|json_encode|raw }};
+
+    const editorElement = document.getElementById(toastUiId);
+    const boundTextarea = editorElement.parentElement.querySelector("textarea.toastui-shadow[data-bound='" + toastUiId + "']");
+
+    const editorRuntimeOptions = {
+        initialValue: editorInitialValue,
+        el: editorElement,
+        };
+    const theseOptions = Object.assign(
+        editorDefaultOptions,
+        fieldCustomOptions,
+        editorRuntimeOptions );
+    const thisEditor = toastui.Editor.factory(theseOptions);
+
+    {# TODO: support overrides for instance properties #}
+    editorDefaultToolbar['remove'].forEach( function(itemName) {
+        thisEditor.removeToolbarItem(itemName);
+        });
+
+    // Add image insertion popup WIP
+    const container = document.createElement('div'),
+        form = document.createElement('form');
+    form.setAttribute('name', 'addImageCustom');
+    container.appendChild(form);
+    // not sure I'm winning with this DOM approach but it would give me JS names for the nodes I want to use later, so instead I am going to set those straight after this block use DOM selector methods
+    const mediaSelect = Object.keys(mediaListOnLoad).map(m => `<option value="${m}">${m}</option>`).join("\n");
+    form.innerHTML = `
+        <label>Image location</label>
+        <select name="url" aria-required="true" required="required" pattern=".+">
+            <option></option>
+            ${mediaSelect}
+        </select>
+        <label>Alternate Text</label>
+        <input name="alt" type="text" />
+        {# TODO: add a title field? #}
+        <label>Caption</label>
+        <input name="caption" type="text" />
+        <fieldset name="classes">
+            <legend>Apply these properties</legend>
+            <input id="label.left.{{ toastui_id }}" name="class[alignleft]" value="alignleft" type="checkbox" /><label for="label.left.{{ toastui_id }}">Left</label>
+            <input id="label.right.{{ toastui_id }}" name="class[alignright]" value="alignright" type="checkbox" /><label for="label.right.{{ toastui_id }}">Right</label>
+            <input id="label.center.{{ toastui_id }}" name="class[aligncenter]" value="aligncenter" type="checkbox" /><label for="label.center.{{ toastui_id }}">Centre</label>
+        </fieldset>
+        <div class="toastui-editor-button-container">
+            <button name="cancelButton" type="button" class="toastui-editor-close-button">Cancel</button>
+            <input name="submitButton" type="submit" class="toastui-editor-ok-button" value="Insert" />
+        </div>
+    `;
+    const fields = form.elements;
+    fields.submitButton.style.display = 'inline'; // TODO: see about putting this somewhere more sensible
+    fields.classes.style['margin-top'] = '1rem'; // as above, so below
+    Array.from(fields.classes.getElementsByTagName('label')).forEach((l) => {
+        l.style.display = 'inline';
+        l.style['padding-right'] = '0.5rem';
+        }); // also this
+
+    const closePopup = () => {
+        console.log('Close popup');
+        thisEditor.eventEmitter.emit('closePopup');
+        thisEditor.focus();
+        };
+
+    fields.url.addEventListener('change', (e) => {
+        if(Object.hasOwn(mediaListOnLoad, e.target.value)) {
+            if(fields.caption.value.trim().length == 0) {
+                fields.caption.value = mediaListOnLoad[e.target.value].caption;
+            }
+            if(fields.alt.value.trim().length == 0) {
+                fields.alt.value = mediaListOnLoad[e.target.value].alt;
+            }
+        }
+        });
+
+    fields.cancelButton.addEventListener('click', closePopup);
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        console.log('Insert button', e);
+
+        const values = {
+            url: fields.url.value,
+            alt: fields.alt.value,
+            caption: fields.caption.value,
+            };
+
+        const classes = Array.from(fields.classes.elements).filter(c => c.checked);
+        if (classes.length > 0) {
+            values['classes'] = classes.map(c => c.value);
+        }
+        thisEditor.eventEmitter.emit('command', 'addMarkdownImage', values);
+        closePopup();
+        });
+
+    thisEditor.insertToolbarItem({}, {
+        name: 'markdownImagePopup',
+        tooltip: 'Add an image',
+        popup: {
+            body: container,
+            className: 'FIXME',
+            style: { width: 'auto' },
+        }   ,
+        text: 'IMG',
+        className: 'toastui-editor-toolbar-icons first',
+        style: { backgroundImage: 'none' },
+        });
+
+    thisEditor.addCommand('markdown', 'addMarkdownImage', (settings, ed) => {
+        console.log('addMarkdownImage', settings, ed, this);
+        let url = settings.url;
+        if(Object.hasOwn(settings, 'classes')) {
+            url += '?classes=' + settings.classes.join();
+        }
+
+        let replacement = `![${settings.alt}](${url})`;
+
+        const captionProvided = ( Object.hasOwn(settings, 'caption') && settings.caption.trim().length > 0);
+        if(captionProvided) {
+            replacement = `[figure caption="${settings.caption}"]${replacement}[/figure]`;
+        }
+
+        thisEditor.replaceSelection(replacement);
+        });
+
+    if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
+        boundTextarea.style.display = 'none';
+        boundTextarea.setAttribute('readonly', 'readonly');
+
+        thisEditor.on('change', function() {
+            boundTextarea.value = thisEditor.getMarkdown();
+            console.log('change value of ' + boundTextarea.name);
+            });
+    }
+
+    });
