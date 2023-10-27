@@ -70,11 +70,12 @@ addEventListener('load', function() {
 
     fields.url.addEventListener('change', (e) => {
         if(Object.hasOwn(mediaListOnLoad, e.target.value)) {
-            if(fields.caption.value.trim().length == 0) {
-                fields.caption.value = mediaListOnLoad[e.target.value].caption;
+            const selectedMediaAsset = mediaListOnLoad[e.target.value];
+            if(fields.caption.value.trim().length == 0 && Object.hasOwn(selectedMediaAsset, 'caption')) {
+                fields.caption.value = selectedMediaAsset.caption;
             }
-            if(fields.alt.value.trim().length == 0) {
-                fields.alt.value = mediaListOnLoad[e.target.value].alt;
+            if(fields.alt.value.trim().length == 0 && Object.hasOwn(selectedMediaAsset, 'alt')) {
+                fields.alt.value = selectedMediaAsset.alt;
             }
         }
         });
