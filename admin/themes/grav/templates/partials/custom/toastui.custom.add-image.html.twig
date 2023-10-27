@@ -118,14 +118,14 @@ addEventListener('load', function() {
             url += '?classes=' + settings.classes.join();
         }
 
-        let replacement = `![${settings.alt}](${url})`;
+        let newMarkdown = `![${settings.alt}](${url})`;
 
         const captionProvided = ( Object.hasOwn(settings, 'caption') && settings.caption.trim().length > 0);
         if(captionProvided) {
-            replacement = `[figure caption="${settings.caption}"]${replacement}[/figure]`;
+            newMarkdown = `[figure caption="${settings.caption}"]${newMarkdown}[/figure]`;
         }
 
-        thisEditor.replaceSelection(replacement);
+        thisEditor.replaceSelection(newMarkdown);
         });
 
     if(typeof thisEditor !== undefined && typeof boundTextarea !== undefined) {
