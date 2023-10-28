@@ -20,6 +20,22 @@ addEventListener('load', function() {
         editorRuntimeOptions );
     const thisEditor = toastui.Editor.factory(theseOptions);
 
+    const uploadMedia = (blob, callback) => {
+        console.log('uploadMedia called', blob);
+        const formData = new FormData();
+        formData.append('file', blob);
+        const imgPath = '/' + window.GravAdmin.config.route.concat('/', formData.get('file').name); // WE DON'T REALLY KNOW IF THAT's CORRECT!!
+
+        const request = new XMLHttpRequest();
+        const reqURI = window.Grav.default.Pages.Page.Media.PageMediaInstances.urls.add.concat(`/admin-nonce:${window.GravAdmin.config.admin_nonce}`);
+        request.open('POST', reqURI, true);
+        request.onload = () => {
+            console.log('upload request results:', request, formData.get('file'));
+            callback();
+            };
+        request.send(formData);
+        };
+
     thisEditor.removeHook('addImageBlobHook'); // remove the default hook, from https://github.com/nhn/tui.editor/issues/1588#issuecomment-865750770
     thisEditor.eventEmitter.listen('addImageBlobHook', (blob, callback) => {
         const formData = new FormData();
@@ -51,8 +67,10 @@ addEventListener('load', function() {
         <label>Image location</label>
         <select name="url" aria-required="true" required="required" pattern=".+">
             <option></option>
+            <option id="imgUploader" value="[file]">Upload an image ..</option>
             ${mediaSelect}
         </select>
+        <input id="newImage" name="newImage" type="file" accept="image/*" />{# FIXME - filter for supported types only #}
         <label>Alternate Text</label>
         <input name="alt" type="text" />
         {# TODO: add a title field? #}
@@ -83,14 +101,31 @@ addEventListener('load', function() {
         thisEditor.focus();
         };
 
+    fields.newImage.addEventListener('change', (e) => {
+        uploadMedia(e.target.files[0], () => {
+            const fileName = fields.newImage.files[0].name;
+            const uploadOptionIndex = fields.url.selectedOptions.item(0).index;
+            fields.url.add(new Option(fileName, fileName, false, true), uploadOptionIndex + 1);
+            });
+        });
+
     fields.url.addEventListener('change', (e) => {
-        if(Object.hasOwn(mediaListOnLoad, e.target.value)) {
-            const selectedMediaAsset = mediaListOnLoad[e.target.value];
-            if(fields.caption.value.trim().length == 0 && Object.hasOwn(selectedMediaAsset, 'caption')) {
-                fields.caption.value = selectedMediaAsset.caption;
+
+        if (e.target.selectedOptions.item(0).id == 'imgUploader') { {# FIXME: set to a random string for @id safety, unhardcode #}
+            fields.newImage.showPicker();
+        }
+        else {
+            if(Object.hasOwn(mediaListOnLoad, e.target.value)) {
+                const selectedMediaAsset = mediaListOnLoad[e.target.value];
+                if(fields.caption.value.trim().length == 0 && Object.hasOwn(selectedMediaAsset, 'caption')) {
+                    fields.caption.value = selectedMediaAsset.caption;
+                }
+                if(fields.alt.value.trim().length == 0 && Object.hasOwn(selectedMediaAsset, 'alt')) {
+                    fields.alt.value = selectedMediaAsset.alt;
+                }
             }
-            if(fields.alt.value.trim().length == 0 && Object.hasOwn(selectedMediaAsset, 'alt')) {
-                fields.alt.value = selectedMediaAsset.alt;
+            else {
+                /* TODO: handle this */
             }
         }
         });
