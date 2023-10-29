@@ -39,8 +39,10 @@ class AdminAddonToastUIEditorPlugin extends Plugin
 
     public function addTemplatePath($event) {
         $event['paths'] = array_merge(
-            $event['paths'],
-            [__DIR__ . '/admin/themes/grav/templates']
+            $event['paths'], [
+                'user://admin/themes/grav/templates',
+                __DIR__ . '/admin/themes/grav/templates',
+            ]
             ); // thanks @OleVik https://github.com/getgrav/grav/issues/1438#issuecomment-295670646
         return $event;
     }

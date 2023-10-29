@@ -1,0 +1,12 @@
+{# this is a JS template literal, so must be escaped accordingly #}
+<label>Alternate Text</label>
+<input name="alt" type="text" />
+{# TODO: add a title field? #}
+<label>Caption</label>
+<input name="caption" type="text" />
+<fieldset name="classes">
+    <legend>Apply these properties</legend>
+    <input id="label.left.{{ toastui_id }}" name="class[alignleft]" value="alignleft" type="checkbox" /><label for="label.left.{{ toastui_id }}">Left</label>
+    <input id="label.right.{{ toastui_id }}" name="class[alignright]" value="alignright" type="checkbox" /><label for="label.right.{{ toastui_id }}">Right</label>
+    <input id="label.center.{{ toastui_id }}" name="class[aligncenter]" value="aligncenter" type="checkbox" /><label for="label.center.{{ toastui_id }}">Centre</label>
+</fieldset>
