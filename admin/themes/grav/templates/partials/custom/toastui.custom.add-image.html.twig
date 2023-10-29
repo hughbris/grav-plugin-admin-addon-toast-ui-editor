@@ -62,7 +62,7 @@ addEventListener('load', function() {
     form.setAttribute('name', 'addImageCustom');
     container.appendChild(form);
     // not sure I'm winning with this DOM approach but it would give me JS names for the nodes I want to use later, so instead I am going to set those straight after this block use DOM selector methods
-    const mediaSelect = Object.keys(mediaListOnLoad).map(m => `<option value="${m}">${m}</option>`).join("\n");
+    const mediaSelect = Object.keys(mediaListOnLoad).map(m => `<option value="/${window.GravAdmin.config.route}/${m}">${m}</option>`).join("\n"); {# FIXME: some assumptions about the media route, as above where I set imgPath #}
     form.innerHTML = `
         <label>Image location</label>
         <select name="url" aria-required="true" required="required" pattern=".+">
