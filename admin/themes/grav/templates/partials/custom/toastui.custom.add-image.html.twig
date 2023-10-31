@@ -67,7 +67,7 @@ addEventListener('load', function() {
         <label>Image location</label>
         <select name="url" aria-required="true" required="required" pattern=".+">
             <option></option>
-            <option id="imgUploader" value="[file]">Upload an image ..</option>
+            <option id="imgUploader-${toastUiId}" value="[file]">Upload an image …</option>
             ${mediaSelect}
         </select>
         <input id="newImage" name="newImage" type="file" accept="image/*" />{# FIXME - filter for supported types only #}
@@ -97,7 +97,7 @@ addEventListener('load', function() {
         uploadMedia(e.target.files[0], () => {
             const fileName = fields.newImage.files[0].name;
             const uploadOptionIndex = fields.url.selectedOptions.item(0).index;
-            fields.url.add(new Option(fileName, fileName, false, true), uploadOptionIndex + 1);
+            fields.url.add(new Option(fileName, fileName, false, true), uploadOptionIndex+1);
             });
         });
 
