@@ -103,7 +103,7 @@ addEventListener('load', function() {
 
     fields.url.addEventListener('change', (e) => {
 
-        if (e.target.selectedOptions.item(0).id == 'imgUploader') { {# FIXME: set to a random string for @id safety, unhardcode #}
+        if (e.target.selectedOptions.item(0).id == 'imgUploader-${toastUiId}') {
             fields.newImage.showPicker();
         }
         else {
