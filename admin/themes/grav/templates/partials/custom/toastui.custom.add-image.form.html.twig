@@ -1,12 +1,14 @@
-{# this is a JS template literal, so must be escaped accordingly #}
-<label>Alternate Text</label>
-<input name="alt" type="text" />
-{# TODO: add a title field? #}
-<label>Caption</label>
-<input name="caption" type="text" />
-<fieldset name="classes">
-    <legend>Apply these properties</legend>
-    <input id="label.left.{{ toastui_id }}" name="class[alignleft]" value="alignleft" type="checkbox" /><label for="label.left.{{ toastui_id }}">Left</label>
-    <input id="label.right.{{ toastui_id }}" name="class[alignright]" value="alignright" type="checkbox" /><label for="label.right.{{ toastui_id }}">Right</label>
-    <input id="label.center.{{ toastui_id }}" name="class[aligncenter]" value="aligncenter" type="checkbox" /><label for="label.center.{{ toastui_id }}">Centre</label>
-</fieldset>
+<label>Image location</label>
+<select name="url" aria-required="true" required="required" pattern=".+">
+    <option></option>
+    <option id="imgUploader-{{ toastui_id }}" value="[file]">Upload an image …</option>
+    {{ admin.page.media|map(m => "<option value=\"#{admin.page.route}/#{m.filename}\">#{m.filename}</option>")|join('\n')|raw }}
+</select>
+<input id="newImage" name="newImage" type="file" accept="image/*" />{# FIXME - filter for supported types only #}
+
+{{ include('partials/custom/toastui.custom.add-image.form.properties.html.twig') }} {# a simple lazy way of customisation, probably gonna be refactored for the better #}
+
+<div class="toastui-editor-button-container">
+    <button name="cancelButton" type="button" class="toastui-editor-close-button">Cancel</button>
+    <input name="submitButton" type="submit" class="toastui-editor-ok-button" value="Insert" />
+</div>

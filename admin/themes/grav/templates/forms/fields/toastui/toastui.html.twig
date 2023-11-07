@@ -1,6 +1,8 @@
 {% extends "forms/field.html.twig" %}
 {% set toastui_id = unique_id(6, {'prefix': 'tui_'}) %}
 {% set configs = config.plugins['admin-addon-toast-ui-editor'] %}
+{% set form_template = include('partials/custom/toastui.custom.add-image.form.html.twig')|raw %}
+
 {% block label %}
     {% if field.label %}
         {% set hint = field.help ? 'data-hint="' ~ field.help|tu|raw ~ '"': '' %}
@@ -22,8 +24,16 @@
             >{{ value }}</textarea>
         </div>
         <div id="{{ toastui_id }}"></div>
+        {% script 'plugins://admin-addon-toast-ui-editor/admin/themes/grav/assets/js/add-image.js' %}
         {% script %}
-            {{ include('partials/custom/toastui.custom.add-image.html.twig') }}
+            var GravPlugin = GravPlugin || {};
+            GravPlugin['adminAddonToastUiEditor'] = GravPlugin.adminAddonToastUiEditor || {};
+            GravPlugin.adminAddonToastUiEditor['configs'] = GravPlugin.adminAddonToastUiEditor.configs || {{ configs|json_encode|raw }};
+
+            addEventListener('load', () => {
+                const editor = GravPlugin.adminAddonToastUiEditor.newEditor('{{ toastui_id }}', '{{ value|e('js') }}', {{ field.attributes.toastui|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|raw }});
+                editor.addButton('{{ form_template|e('js') }}', editor); {# passing 'this' context in here to work around a shortcoming in my ability to find 'this' #}
+                });
         {% endscript %}
     </div>
 
