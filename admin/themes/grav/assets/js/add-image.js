@@ -113,7 +113,7 @@
 			GravPlugin.adminAddonToastUiEditor.uploadMedia(e.target.files[0], () => {
 				const fileName = fields.newImage.files[0].name;
 				const uploadOptionIndex = fields.url.selectedOptions.item(0).index;
-				fields.url.add(new Option(fileName, fileName, false, true), uploadOptionIndex+1);
+				fields.url.add(new Option(fileName, `/${window.GravAdmin.config.route}/${fileName}`, false, true), uploadOptionIndex+1);
 				});
 			});
 
