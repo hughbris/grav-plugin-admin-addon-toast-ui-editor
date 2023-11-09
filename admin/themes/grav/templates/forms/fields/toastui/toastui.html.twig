@@ -33,6 +33,24 @@
             addEventListener('load', () => {
                 const editor = GravPlugin.adminAddonToastUiEditor.newEditor('{{ toastui_id }}', '{{ value|e('js') }}', {{ field.attributes.toastui|default({})|json_encode(constant('JSON_FORCE_OBJECT'))|raw }});
                 editor.addButton('{{ form_template|e('js') }}', editor); {# passing 'this' context in here to work around a shortcoming in my ability to find 'this' #}
+
+                editor.insertToolbarItem({}, {
+                    name: 'fullscreen',
+                    tooltip: 'Fullscreen',
+                    /* $el: $('<button type="button" value="" onclick="fsClick();"><i class="fa fa-fw fa-expand"></i></button>'), */
+                    /* text: 'IMG', */
+                    command: 'fullscreen',
+                    className: 'toastui-editor-toolbar-icons custom-toolbar-icon fullscreen',
+                    style: { backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><path fill="none" stroke="rgb(91,51,91)" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M432 320v112H320M421.8 421.77L304 304M80 192V80h112M90.2 90.23L208 208M320 80h112v112M421.77 90.2L304 208M192 432H80V320M90.23 421.8L208 304"/></svg>')`, backgroundSize: 'contain', },
+                    });
+
+                editor.addCommand('markdown', 'fullscreen', () => {
+                    const wrapper = $(editor.mdEditor.el).parents('.toastui-editor-defaultUI');
+                    wrapper.toggleClass('fs')
+                    const currentHeight = parseInt(editor.getHeight());
+                    editor.setHeight((wrapper.hasClass('fs') ? currentHeight * 2 : currentHeight / 2) + 'px');
+                    });
+
                 });
         {% endscript %}
     </div>
